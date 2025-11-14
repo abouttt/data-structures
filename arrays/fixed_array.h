@@ -23,7 +23,7 @@ public:
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-	constexpr reference at(size_type pos)
+	reference at(size_type pos)
 	{
 		if (pos >= N) {
 			throw std::out_of_range("FixedArray::at - index out of range");
@@ -31,7 +31,7 @@ public:
 		return elems[pos];
 	}
 
-	constexpr const_reference at(size_type pos) const
+	const_reference at(size_type pos) const
 	{
 		if (pos >= N) {
 			throw std::out_of_range("FixedArray::at - index out of range");
@@ -39,127 +39,127 @@ public:
 		return elems[pos];
 	}
 
-	constexpr reference operator[](size_type pos) noexcept
+	reference operator[](size_type pos)
 	{
 		return elems[pos];
 	}
 
-	constexpr const_reference operator[](size_type pos) const noexcept
+	const_reference operator[](size_type pos) const
 	{
 		return elems[pos];
 	}
 
-	constexpr reference front() noexcept
+	reference front()
 	{
 		return elems[0];
 	}
 
-	constexpr const_reference front() const noexcept
+	const_reference front() const
 	{
 		return elems[0];
 	}
 
-	constexpr reference back() noexcept
+	reference back()
 	{
 		return elems[N - 1];
 	}
 
-	constexpr const_reference back() const noexcept
+	const_reference back() const
 	{
 		return elems[N - 1];
 	}
 
-	constexpr T* data() noexcept
+	T* data()
 	{
 		return elems;
 	}
 
-	constexpr const T* data() const noexcept
+	const T* data() const
 	{
 		return elems;
 	}
 
-	constexpr iterator begin() noexcept
+	iterator begin()
 	{
 		return elems;
 	}
 
-	constexpr const_iterator begin() const noexcept
+	const_iterator begin() const
 	{
 		return elems;
 	}
 
-	constexpr const_iterator cbegin() const noexcept
+	const_iterator cbegin() const
 	{
 		return elems;
 	}
 
-	constexpr iterator end() noexcept
+	iterator end()
 	{
 		return elems + N;
 	}
 
-	constexpr const_iterator end() const noexcept
+	const_iterator end() const
 	{
 		return elems + N;
 	}
 
-	constexpr const_iterator cend() const noexcept
+	const_iterator cend() const
 	{
 		return elems + N;
 	}
 
-	constexpr reverse_iterator rbegin() noexcept
+	reverse_iterator rbegin()
 	{
 		return reverse_iterator(end());
 	}
 
-	constexpr const_reverse_iterator rbegin() const noexcept
+	const_reverse_iterator rbegin() const
 	{
 		return const_reverse_iterator(end());
 	}
 
-	constexpr const_reverse_iterator crbegin() const noexcept
+	const_reverse_iterator crbegin() const
 	{
 		return const_reverse_iterator(end());
 	}
 
-	constexpr reverse_iterator rend() noexcept
+	reverse_iterator rend()
 	{
 		return reverse_iterator(begin());
 	}
 
-	constexpr const_reverse_iterator rend() const noexcept
+	const_reverse_iterator rend() const
 	{
 		return const_reverse_iterator(begin());
 	}
 
-	constexpr const_reverse_iterator crend() const noexcept
+	const_reverse_iterator crend() const
 	{
 		return const_reverse_iterator(begin());
 	}
 
-	constexpr bool empty() const noexcept
+	bool empty() const
 	{
 		return N == 0;
 	}
 
-	constexpr size_type size() const noexcept
+	size_type size() const
 	{
 		return N;
 	}
 
-	constexpr size_type max_size() const noexcept
+	size_type max_size() const
 	{
 		return N;
 	}
 
-	constexpr void fill(const T& value)
+	void fill(const T& value)
 	{
 		std::fill_n(elems, N, value);
 	}
 
-	constexpr void swap(FixedArray& other) noexcept(std::is_nothrow_swappable_v<T>)
+	void swap(FixedArray& other)
 	{
 		std::swap_ranges(elems, elems + N, other.elems);
 	}
@@ -168,19 +168,13 @@ public:
 };
 
 template <typename T, std::size_t N>
-constexpr void swap(FixedArray<T, N>& lhs, FixedArray<T, N>& rhs) noexcept(noexcept(lhs.swap(rhs)))
-{
-	lhs.swap(rhs);
-}
-
-template <typename T, std::size_t N>
-constexpr bool operator==(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
+bool operator==(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
 {
 	return std::equal(lhs.data(), lhs.data() + N, rhs.data());
 }
 
 template <typename T, std::size_t N>
-constexpr auto operator<=>(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
+auto operator<=>(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
 {
 	return std::lexicographical_compare_three_way(
 		lhs.data(), lhs.data() + N,
