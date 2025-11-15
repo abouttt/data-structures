@@ -11,6 +11,8 @@ template <typename T, std::size_t N>
 class FixedArray
 {
 public:
+	// --- Member Types ---
+
 	using value_type = T;
 	using size_type = std::size_t;
 	using difference_type = std::ptrdiff_t;
@@ -22,6 +24,8 @@ public:
 	using const_iterator = const T*;
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+	// --- Element Access ---
 
 	reference at(size_type pos)
 	{
@@ -78,6 +82,8 @@ public:
 	{
 		return elems;
 	}
+
+	// --- Iterators ---
 
 	iterator begin()
 	{
@@ -139,6 +145,8 @@ public:
 		return const_reverse_iterator(begin());
 	}
 
+	// --- Capacity ---
+
 	bool empty() const
 	{
 		return N == 0;
@@ -154,6 +162,8 @@ public:
 		return N;
 	}
 
+	// --- Operations ---
+
 	void fill(const T& value)
 	{
 		std::fill_n(elems, N, value);
@@ -166,6 +176,8 @@ public:
 
 	T elems[N]; // aggregate initialization
 };
+
+// --- Non-member functions ---
 
 template <typename T, std::size_t N>
 bool operator==(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
