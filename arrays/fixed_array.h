@@ -182,14 +182,14 @@ public:
 template <typename T, std::size_t N>
 bool operator==(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
 {
-	return std::equal(lhs.data(), lhs.data() + N, rhs.data());
+	return std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 template <typename T, std::size_t N>
 auto operator<=>(const FixedArray<T, N>& lhs, const FixedArray<T, N>& rhs)
 {
 	return std::lexicographical_compare_three_way(
-		lhs.data(), lhs.data() + N,
-		rhs.data(), rhs.data() + N
+		lhs.begin(), lhs.end(),
+		rhs.begin(), rhs.end()
 	);
 }
