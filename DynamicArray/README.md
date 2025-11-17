@@ -26,7 +26,7 @@ The following functions provide element access, capacity management, and modific
 - `At(size_t)` — Bounds-checked access (throws on invalid index)  
 - `Front()` — Returns the first element  
 - `Back()` — Returns the last element  
-- `Data()` — Returns a pointer to the internal buffer  
+- `GetData()` — Returns a pointer to the internal buffer  
 
 ---
 
