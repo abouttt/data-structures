@@ -11,13 +11,13 @@ class LinkedList
 private:
 	struct NodeBase
 	{
-		NodeBase* next;
-		NodeBase* prev;
+		NodeBase* Next;
+		NodeBase* Prev;
 	};
 
 	struct Node : public NodeBase
 	{
-		T data;
+		T Data;
 	};
 
 public:
@@ -50,8 +50,8 @@ public:
 			NodeBase* current = other.m_Head;
 			while (current)
 			{
-				PushBack(static_cast<Node*>(current)->data);
-				current = current->next;
+				PushBack(static_cast<Node*>(current)->Data);
+				current = current->Next;
 			}
 		}
 	}
@@ -93,25 +93,25 @@ public:
 	T& Front()
 	{
 		assert(m_Head != nullptr && "Front() called on empty LinkedList");
-		return static_cast<Node*>(m_Head)->data;
+		return static_cast<Node*>(m_Head)->Data;
 	}
 
 	const T& Front() const
 	{
 		assert(m_Head != nullptr && "Front() called on empty LinkedList");
-		return static_cast<Node*>(m_Head)->data;
+		return static_cast<Node*>(m_Head)->Data;
 	}
 
 	T& Back()
 	{
 		assert(m_Tail != nullptr && "Back() called on empty LinkedList");
-		return static_cast<Node*>(m_Tail)->data;
+		return static_cast<Node*>(m_Tail)->Data;
 	}
 
 	const T& Back() const
 	{
 		assert(m_Tail != nullptr && "Back() called on empty LinkedList");
-		return static_cast<Node*>(m_Tail)->data;
+		return static_cast<Node*>(m_Tail)->Data;
 	}
 
 	// --- Capacity ---
@@ -133,7 +133,7 @@ public:
 		while (m_Head)
 		{
 			NodeBase* temp = m_Head;
-			m_Head = m_Head->next;
+			m_Head = m_Head->Next;
 			delete static_cast<Node*>(temp);
 		}
 		m_Tail = nullptr;
@@ -156,7 +156,7 @@ public:
 		Node* newNode = new Node{ nullptr, m_Tail, T(std::forward<Args>(args)...) };
 		if (m_Tail)
 		{
-			m_Tail->next = newNode;
+			m_Tail->Next = newNode;
 		}
 		else
 		{
@@ -165,7 +165,7 @@ public:
 		m_Tail = newNode;
 		++m_Size;
 
-		return newNode->data;
+		return newNode->Data;
 	}
 
 	void PopBack()
@@ -173,10 +173,10 @@ public:
 		assert(m_Tail != nullptr && "PopBack() called on empty LinkedList");
 
 		NodeBase* temp = m_Tail;
-		m_Tail = m_Tail->prev;
+		m_Tail = m_Tail->Prev;
 		if (m_Tail)
 		{
-			m_Tail->next = nullptr;
+			m_Tail->Next = nullptr;
 		}
 		else
 		{
@@ -202,7 +202,7 @@ public:
 		Node* newNode = new Node{ m_Head, nullptr, T(std::forward<Args>(args)...) };
 		if (m_Head)
 		{
-			m_Head->prev = newNode;
+			m_Head->Prev = newNode;
 		}
 		else
 		{
@@ -211,7 +211,7 @@ public:
 		m_Head = newNode;
 		++m_Size;
 
-		return newNode->data;
+		return newNode->Data;
 	}
 
 	void PopFront()
@@ -219,10 +219,10 @@ public:
 		assert(m_Head != nullptr && "PopFront() called on empty LinkedList");
 
 		NodeBase* temp = m_Head;
-		m_Head = m_Head->next;
+		m_Head = m_Head->Next;
 		if (m_Head)
 		{
-			m_Head->prev = nullptr;
+			m_Head->Prev = nullptr;
 		}
 		else
 		{
@@ -260,6 +260,60 @@ public:
 		std::swap(m_Head, other.m_Head);
 		std::swap(m_Tail, other.m_Tail);
 		std::swap(m_Size, other.m_Size);
+	}
+
+	// --- Comparison operators ---
+
+	template <typename U>
+	friend bool operator==(const LinkedList<U>& lhs, const LinkedList<U>& rhs)
+	{
+		if (lhs.m_Size != rhs.m_Size)
+		{
+			return false;
+		}
+
+		NodeBase* currentLhs = lhs.m_Head;
+		NodeBase* currentRhs = rhs.m_Head;
+		while (currentLhs && currentRhs)
+		{
+			if (static_cast<Node*>(currentLhs)->Data != static_cast<Node*>(currentRhs)->Data)
+			{
+				return false;
+			}
+			currentLhs = currentLhs->Next;
+			currentRhs = currentRhs->Next;
+		}
+
+		return true;
+	}
+
+	template <typename U>
+	friend auto operator<=>(const LinkedList<U>& lhs, const LinkedList<U>& rhs)
+	{
+		NodeBase* currentLhs = lhs.m_Head;
+		NodeBase* currentRhs = rhs.m_Head;
+		while (currentLhs && currentRhs)
+		{
+			if (auto comp = static_cast<Node*>(currentLhs)->Data <=> static_cast<Node*>(currentRhs)->Data; comp != 0)
+			{
+				return comp;
+			}
+			currentLhs = currentLhs->Next;
+			currentRhs = currentRhs->Next;
+		}
+
+		if (!currentLhs && !currentRhs)
+		{
+			return std::strong_ordering::equal;
+		}
+		else if (!currentLhs)
+		{
+			return std::strong_ordering::less;
+		}
+		else
+		{
+			return std::strong_ordering::greater;
+		}
 	}
 
 private:
