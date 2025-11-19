@@ -254,6 +254,27 @@ public:
 		std::swap(m_Capacity, other.m_Capacity);
 	}
 
+	// --- Comparison operators ---
+
+	template <typename U>
+	friend bool operator==(const DynamicArray<U>& lhs, const DynamicArray<U>& rhs)
+	{
+		if (lhs.m_Size != rhs.m_Size)
+		{
+			return false;
+		}
+		return std::equal(lhs.m_Data, lhs.m_Data + lhs.m_Size, rhs.m_Data);
+	}
+
+	template <typename U>
+	friend auto operator<=>(const DynamicArray<U>& lhs, const DynamicArray<U>& rhs)
+	{
+		return std::lexicographical_compare_three_way(
+			lhs.m_Data, lhs.m_Data + lhs.m_Size,
+			rhs.m_Data, rhs.m_Data + rhs.m_Size
+		);
+	}
+
 private:
 	void ensureCapacity(size_t minCapacity)
 	{
@@ -327,24 +348,3 @@ private:
 	size_t m_Size;
 	size_t m_Capacity;
 };
-
-// --- Non-member functions ---
-
-template <typename T>
-constexpr bool operator==(const DynamicArray<T>& lhs, const DynamicArray<T>& rhs)
-{
-	if (lhs.GetSize() != rhs.GetSize())
-	{
-		return false;
-	}
-	return std::equal(lhs.GetData(), lhs.GetData() + lhs.GetSize(), rhs.GetData());
-}
-
-template <typename T>
-constexpr auto operator<=>(const DynamicArray<T>& lhs, const DynamicArray<T>& rhs)
-{
-	return std::lexicographical_compare_three_way(
-		lhs.GetData(), lhs.GetData() + lhs.GetSize(),
-		rhs.GetData(), rhs.GetData() + rhs.GetSize()
-	);
-}
