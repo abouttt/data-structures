@@ -11,7 +11,6 @@ int main()
     arr.PushBack(1);
     arr.PushBack(2);
     arr.PushBack(3);
-
     assert(arr.GetSize() == 3);
     assert(arr.Front() == 1);
     assert(arr.Back() == 3);
