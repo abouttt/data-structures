@@ -1,62 +1,60 @@
 # LinkedList
 
-`LinkedList` is a doubly linked container implemented in C++.  
-Each node stores `Next`, `Prev`, and a `Data` value, enabling fast insertion and removal at both ends of the list.  
-The container supports deep copying, moving, resizing, comparison, and basic list operations.
+`LinkedList` is a doubly linked list container implemented in C++.  
+Each node stores `Next`, `Prev`, and `Data`.  
+The structure supports fast insertion/removal, deep copying, moving, resizing, and comparison.
 
 ---
 
 # Interface
 
-The following functions provide element access, capacity queries, and modification utilities for operating on a linked list.
+The following interface provides constructors, accessors, capacity utilities, and modification operations.
 
 ### Constructors / Destructor / Assignment
-- `LinkedList()` — Creates an empty list  
-- `LinkedList(std::initializer_list<T>)` — Initializes from `{1,2,3}`  
-- `LinkedList(const LinkedList&)` — Deep copy constructor  
-- `LinkedList(LinkedList&&)` — Move constructor  
-- `operator=` — Copy and move assignment  
-- `~LinkedList()` — Destroys all nodes  
+- `LinkedList()` — Creates an empty list.  
+- `LinkedList(std::initializer_list<T>)` — Initializes from `{1, 2, 3}`.  
+- `LinkedList(const LinkedList&)` — Deep copy constructor.  
+- `LinkedList(LinkedList&&)` — Move constructor.  
+- `operator=` — Copy/move assignment.  
+- `~LinkedList()` — Destroys all nodes.
 
 ---
 
 ### Element Access
-- `Front()` — Returns the first element  
-- `Back()` — Returns the last element  
+- `Front()` — Returns the first element.  
+- `Back()` — Returns the last element.
 
 ---
 
 ### Capacity
-- `GetSize()` — Returns the number of elements  
-- `IsEmpty()` — Returns whether the list is empty  
+- `GetSize()` — Returns number of nodes.  
+- `IsEmpty()` — Returns true if size is zero.
 
 ---
 
 ### Modifiers
-- `PushFront(const T&)` — Inserts at the front  
-- `PushFront(T&&)` — Inserts by move at the front  
-- `EmplaceFront(args...)` — Constructs an element at the front  
+- `PushFront(const T&)` — Inserts at the front.  
+- `PushFront(T&&)` — Inserts by move at the front.  
+- `EmplaceFront(args...)` — Constructs in place at the front.
 
-- `PushBack(const T&)` — Inserts at the back  
-- `PushBack(T&&)` — Inserts by move at the back  
-- `EmplaceBack(args...)` — Constructs an element at the back  
+- `PushBack(const T&)` — Inserts at the back.  
+- `PushBack(T&&)` — Inserts by move at the back.  
+- `EmplaceBack(args...)` — Constructs in place at the back.
 
-- `PopFront()` — Removes the first element  
-- `PopBack()` — Removes the last element  
+- `PopFront()` — Removes first element.  
+- `PopBack()` — Removes last element.
 
-- `Resize(size_t)` — Resizes using default construction  
-- `Resize(size_t, const T&)` — Resizes and fills new nodes with a value  
+- `Resize(size_t)` — Resizes with default values.  
+- `Resize(size_t, const T&)` — Resizes and fills.
 
-- `Clear()` — Removes all nodes  
-- `Swap(other)` — Exchanges internal resources  
+- `Clear()` — Removes all nodes.  
+- `Swap(other)` — Exchanges pointers and size.
 
 ---
 
 ### Comparison Operators
-- `operator==` — Compares lists for equality  
-- `operator<=>` — Lexicographical three-way comparison  
-
-These are implemented as friend functions for efficient access to internal node data.
+- `operator==` — Node-by-node equality comparison.  
+- `operator<=>` — Lexicographical comparison.
 
 ---
 
@@ -68,20 +66,28 @@ These are implemented as friend functions for efficient access to internal node 
 
 int main()
 {
-    LinkedList<int> list = {1, 2, 3};
+    // Create a list with initial elements
+    LinkedList<int> list = {1, 2, 3};          // [1, 2, 3]
 
-    list.PushFront(0);
-    list.PushBack(4);
+    // Insert at both ends
+    list.PushFront(0);                         // [0, 1, 2, 3]
+    list.PushBack(4);                          // [0, 1, 2, 3, 4]
 
-    std::cout << "Front: " << list.Front() << "\n";  // 0
-    std::cout << "Back:  " << list.Back()  << "\n";  // 4
-    std::cout << "Size:  " << list.GetSize() << "\n"; // 5
+    // Inspect first and last elements
+    std::cout << "Front: " << list.Front() << "\n"; // 0
+    std::cout << "Back:  " << list.Back()  << "\n"; // 4
+    std::cout << "Size:  " << list.GetSize() << "\n";
 
-    list.PopFront();
-    list.PopBack();
+    // Remove from both ends
+    list.PopFront();                           // [1, 2, 3, 4]
+    list.PopBack();                            // [1, 2, 3]
 
-    std::cout << "Front: " << list.Front() << "\n";  // 1
-    std::cout << "Back:  " << list.Back()  << "\n";  // 3
+    // Grow the list, filling new nodes with 10
+    list.Resize(5, 10);                        // [1, 2, 3, 10, 10]
+
+    // Simple readout of front/back after operations
+    std::cout << "Front after resize: " << list.Front() << "\n"; // 1
+    std::cout << "Back after resize:  " << list.Back()  << "\n"; // 10
 
     return 0;
 }
