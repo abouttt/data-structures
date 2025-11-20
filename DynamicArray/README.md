@@ -1,6 +1,5 @@
 # DynamicArray
 
-## Description
 `DynamicArray` is a custom C++ dynamic array container that provides automatic resizing, element access, and efficient insertion at the end of the array.  
 It manually manages memory using raw allocation and placement construction, offering behavior similar to `std::vector` while exposing the underlying mechanisms more explicitly.
 
@@ -48,6 +47,14 @@ The following functions provide element access, capacity management, and modific
 - `Resize(size_t)` — Resizes with default construction  
 - `Resize(size_t, const T&)` — Resizes and fills with a value  
 - `Swap(other)` — Exchanges internal resources  
+
+---
+
+### Comparison Operators
+- `operator==` — Compares stacks for equality  
+- `operator<=>` — Lexicographical three-way comparison  
+
+These are implemented as friend functions for efficient access to private storage.
 
 ---
 
