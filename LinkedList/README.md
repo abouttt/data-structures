@@ -36,17 +36,13 @@ The following interface provides constructors, accessors, capacity utilities, an
 - `PushFront(const T&)` — Inserts at the front.  
 - `PushFront(T&&)` — Inserts by move at the front.  
 - `EmplaceFront(args...)` — Constructs in place at the front.
-
 - `PushBack(const T&)` — Inserts at the back.  
 - `PushBack(T&&)` — Inserts by move at the back.  
 - `EmplaceBack(args...)` — Constructs in place at the back.
-
 - `PopFront()` — Removes first element.  
 - `PopBack()` — Removes last element.
-
 - `Resize(size_t)` — Resizes with default values.  
 - `Resize(size_t, const T&)` — Resizes and fills.
-
 - `Clear()` — Removes all nodes.  
 - `Swap(other)` — Exchanges pointers and size.
 
