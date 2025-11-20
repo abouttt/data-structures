@@ -61,8 +61,8 @@ These are implemented as friend functions for efficient access to private storag
 # Usage
 
 ```cpp
-#include "DynamicArray.h"
 #include <iostream>
+#include "DynamicArray.h"
 
 int main()
 {
