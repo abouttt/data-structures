@@ -259,6 +259,21 @@ private:
 
 	void reallocateCircular(size_t newCapacity)
 	{
+		if (newCapacity == m_Capacity)
+		{
+			return;
+		}
+
+		if (newCapacity == 0)
+		{
+			deallocateCircular();
+			m_Data = nullptr;
+			m_Front = 0;
+			m_Back = 0;
+			m_Size = 0;
+			m_Capacity = 0;
+		}
+
 		T* newData = static_cast<T*>(::operator new(newCapacity * sizeof(T)));
 
 		if (m_Data)
