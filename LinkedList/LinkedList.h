@@ -152,7 +152,7 @@ public:
 	template <typename... Args>
 	T& EmplaceBack(Args&&... args)
 	{
-		Node* newNode = new Node{ nullptr, m_Tail, T(std::forward<Args>(args)...) };
+		Node* newNode = new Node{ nullptr, m_Tail, T{std::forward<Args>(args)...} };
 		if (m_Tail)
 		{
 			m_Tail->Next = newNode;
@@ -198,7 +198,7 @@ public:
 	template <typename... Args>
 	T& EmplaceFront(Args&&... args)
 	{
-		Node* newNode = new Node{ m_Head, nullptr, T(std::forward<Args>(args)...) };
+		Node* newNode = new Node{ m_Head, nullptr, T{std::forward<Args>(args)...} };
 		if (m_Head)
 		{
 			m_Head->Prev = newNode;
