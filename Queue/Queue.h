@@ -173,7 +173,16 @@ public:
 
 	void Push(const T& value)
 	{
-		Emplace(value);
+		// Prevents dangling references when copying from own elements.
+		if (m_Data && (&value >= m_Data && &value < m_Data + m_Capacity))
+		{
+			T temp = value;
+			Emplace(std::move(temp));
+		}
+		else
+		{
+			Emplace(value);
+		}
 	}
 
 	void Push(T&& value)
