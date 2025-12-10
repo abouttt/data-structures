@@ -203,7 +203,16 @@ public:
 
 	void PushBack(const T& value)
 	{
-		EmplaceBack(value);
+		// Prevents dangling references when copying from own elements.
+		if (&value >= m_Data && &value < m_Data + m_Size)
+		{
+			T temp = value;
+			EmplaceBack(std::move(temp));
+		}
+		else
+		{
+			EmplaceBack(value);
+		}
 	}
 
 	void PushBack(T&& value)
