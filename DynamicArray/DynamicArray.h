@@ -236,7 +236,7 @@ public:
 		{
 			ensureCapacity(newSize);
 
-			if constexpr (std::is_scalar_v<T>)
+			if constexpr (std::is_default_constructible_v<T>)
 			{
 				std::uninitialized_value_construct_n(m_Data + m_Size, newSize - m_Size);
 			}
