@@ -201,6 +201,135 @@ public:
 		m_Size = 0;
 	}
 
+	void Insert(size_t index, const T& value)
+	{
+		Emplace(index, value);
+	}
+
+	void Insert(size_t index, T&& value)
+	{
+		Emplace(index, std::move(value));
+	}
+
+	void Insert(size_t index, size_t count, const T& value)
+	{
+		if (index > m_Size)
+		{
+			throw std::out_of_range("Index out of range");
+		}
+
+		if (count == 0)
+		{
+			return;
+		}
+
+		ensureCapacity(m_Size + count);
+
+		if (index < m_Size)
+		{
+			size_t elementsToMove = m_Size - index;
+			size_t uninitMoveCount = elementsToMove > count ? count : elementsToMove;
+			std::uninitialized_move(m_Data + m_Size - uninitMoveCount, m_Data + m_Size, m_Data + m_Size + count - uninitMoveCount);
+			if (elementsToMove > uninitMoveCount)
+			{
+				std::move_backward(m_Data + index, m_Data + m_Size - uninitMoveCount, m_Data + m_Size + count - uninitMoveCount);
+			}
+		}
+
+		std::uninitialized_fill_n(m_Data + index, count, value);
+		m_Size += count;
+	}
+
+	void Insert(size_t index, std::initializer_list<T> ilist)
+	{
+		if (index > m_Size)
+		{
+			throw std::out_of_range("Index out of range");
+		}
+
+		size_t count = ilist.size();
+		if (count == 0)
+		{
+			return;
+		}
+
+		ensureCapacity(m_Size + count);
+
+		if (index < m_Size)
+		{
+			size_t elementsToMove = m_Size - index;
+			size_t uninitMoveCount = elementsToMove > count ? count : elementsToMove;
+			std::uninitialized_move(m_Data + m_Size - uninitMoveCount, m_Data + m_Size, m_Data + m_Size + count - uninitMoveCount);
+			if (elementsToMove > uninitMoveCount)
+			{
+				std::move_backward(m_Data + index, m_Data + m_Size - uninitMoveCount, m_Data + m_Size + count - uninitMoveCount);
+			}
+		}
+
+		std::uninitialized_copy(ilist.begin(), ilist.end(), m_Data + index);
+		m_Size += count;
+	}
+
+	template <typename... Args>
+	T& Emplace(size_t index, Args&&... args)
+	{
+		if (index > m_Size)
+		{
+			throw std::out_of_range("Index out of range");
+		}
+
+		ensureCapacity(m_Size + 1);
+
+		if (index < m_Size)
+		{
+			std::construct_at(m_Data + m_Size, std::move(m_Data[m_Size - 1]));
+			std::move_backward(m_Data + index, m_Data + m_Size - 1, m_Data + m_Size);
+			std::destroy_at(m_Data + index);
+		}
+
+		T* newElement = std::construct_at(m_Data + index, std::forward<Args>(args)...);
+		++m_Size;
+
+		return *newElement;
+	}
+
+	void Erase(size_t index)
+	{
+		if (index >= m_Size)
+		{
+			throw std::out_of_range("Index out of range");
+		}
+
+		if (index < m_Size - 1)
+		{
+			std::move(m_Data + index + 1, m_Data + m_Size, m_Data + index);
+		}
+
+		--m_Size;
+		std::destroy_at(m_Data + m_Size);
+	}
+
+	void Erase(size_t index, size_t count)
+	{
+		if (index > m_Size || index + count > m_Size)
+		{
+			throw std::out_of_range("Index out of range");
+		}
+
+		if (count == 0)
+		{
+			return;
+		}
+
+		if (index + count < m_Size)
+		{
+			std::move(m_Data + index + count, m_Data + m_Size, m_Data + index);
+		}
+
+		std::destroy_n(m_Data + (m_Size - count), count);
+		m_Size -= count;
+	}
+
 	void PushBack(const T& value)
 	{
 		EmplaceBack(value);
