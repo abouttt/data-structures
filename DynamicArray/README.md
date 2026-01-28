@@ -8,7 +8,7 @@
 ## 시간 복잡도 (Time Complexity)
 
 - 임의 접근: O(1)
-- 끝에 삽입/삭제: 분할 상환 O(1) (Amortized O(1))
+- 끝에 삽입/삭제: 분할 상환 O(1)
 - 중간 삽입/삭제: O(n)
 - 탐색: O(n)
 
@@ -189,7 +189,7 @@ int main()
 
     try
     {
-        int value = arr[10]; // 범위를 벗어난 접근
+        int value = arr[10];
     }
     catch (const std::out_of_range& e)
     {
